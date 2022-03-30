@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 
 import E01Chat.Controller.Chat;
 import E01Chat.Model.BaseDades;
+import E01Chat.Model.Usuario;
 
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
@@ -38,6 +39,8 @@ public class chatGUI {
 	private JFrame frame;
 	private JTextField username;
 
+	
+	private JButton btnDesconexion;
 
 	/* Parte superior CHAT */
 	private JPanel panel_top;
@@ -118,20 +121,32 @@ public class chatGUI {
 		username.setColumns(10);
 
 		JButton btnConectar = new JButton("Conectar");
-		panel_login.add(btnConectar);
-
+		this.btnDesconexion = new JButton("Desconectar");
+		
+		this.panel_login.add(btnConectar);
+		
+		this.panel_login.add(btnDesconexion);
+		this.btnDesconexion.setVisible(false);
+		
+		
+		
+		
+		
 		btnConectar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String usuario = username.getText();
+					Usuario userName = new Usuario();
+						userName.setNick(username.getText());
 					Chat prueba = new Chat();
 
-					prueba.conectarUsuario(usuario);
+					prueba.conectarUsuario(userName);
 
 				} catch (Exception f) {
 					JOptionPane.showMessageDialog(null, f, "Exception detected", JOptionPane.WARNING_MESSAGE);
 				}
+				btnDesconexion.setVisible(true);
 				sesionIniciada();
+				
 			}
 		});
 
@@ -148,7 +163,8 @@ public class chatGUI {
 	}
 
 	public void sesionIniciada() {
-		JButton btnDesconexion = new JButton("Desconectar");
+		
+		
 		btnDesconexion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -167,7 +183,7 @@ public class chatGUI {
 		});
 
 		btnDesconexion.setForeground(Color.RED);
-		this.panel_login.add(btnDesconexion);
+		
 	}
 
 	public JFrame getFrame() {

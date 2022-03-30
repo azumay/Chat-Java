@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 import E01Chat.Model.BaseDades;
+import E01Chat.Model.Usuario;
 
 public class Chat {
 
@@ -21,12 +22,11 @@ public class Chat {
 	}
 	
 	
-	public void conectarUsuario(String user) throws ClassNotFoundException, SQLException {
+	public void conectarUsuario(Usuario user) throws ClassNotFoundException, SQLException {
 
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
 			CallableStatement stmt = conexion.prepareCall("{call connect(?)}");
-			stmt.setString(1, user);
+			stmt.setString(1, user.getNick());
 			ResultSet result = stmt.executeQuery();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Exception detected", JOptionPane.WARNING_MESSAGE);
