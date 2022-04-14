@@ -90,19 +90,32 @@ public class Model {
         stmt.close();
     }
 	
+	
+	
+	
+	
 	public ArrayList<Mensaje> getMensajes () throws SQLException {
+		
+		ArrayList<Mensaje> men = new ArrayList<>();
+		
+		try {
+		Class.forName("com.mysql.jdbc.Driver");
         ResultSet result = this.conexion.createStatement().executeQuery("call getMessages()");
-        ArrayList<Mensaje> men = new ArrayList<>();
 
+		
         while (result.next()) {
         	Mensaje mensajes = new Mensaje();
         	mensajes.setNick(result.getString("nick"));
         	mensajes.setMensaje(result.getString("mensaje"));
         	mensajes.setHora(result.getTimestamp("hora"));
         	men.add(mensajes);
-        }
+        	}
+		}
+		catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Exception detected", JOptionPane.WARNING_MESSAGE);
+		}
 
-        result.close();
+   
         return men;
     }
 	

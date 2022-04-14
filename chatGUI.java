@@ -19,6 +19,8 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.xml.parsers.ParserConfigurationException;
 
+import E01Chat.exception.ExceptionChat;
+import E01Chat.model.Mensaje;
 import E01Chat.model.Model;
 import E01Chat.model.Usuario;
 
@@ -40,6 +42,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 
 public class chatGUI {
 
@@ -49,15 +52,14 @@ public class chatGUI {
 	private JLabel labelUsuarioOnline;
 
 	private JButton btnDesconexion;
-
-	/* Parte superior CHAT */
-	private JPanel panel_top;
 	private JPanel panel_2;
-	private JPanel panel_login;
 	private JPanel panel_4;
+	private JTextArea inputMensaje;
+	private JPanel msgArea;
 
 	private JPanel panel_online;
-	private JTextArea inputText;
+
+	private JButton btnEnviar;
 
 	/**
 	 * Create the application.
@@ -65,26 +67,23 @@ public class chatGUI {
 	public chatGUI() {
 
 		initialize();
-		panelChat();
+		UsuariosOnline();
+
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		
-		/*VENTANA PRINCIPAL*/
+
+		/* VENTANA PRINCIPAL */
 		frame = new JFrame();
 		frame.setTitle("Chat Online");
-		frame.setBounds(100, 100, 600, 600);
+		frame.setBounds(100, 100, 700, 665);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
-		frame.getContentPane().setBackground(new Color(18, 18, 18));
+		frame.getContentPane().setBackground(new Color(34, 46, 53));
 		frame.getContentPane().setLayout(null);
-		
-	
-		
-		
 
 		/* POSICIONAMIENTO AUTO DE LA VENTANA DEL JUEGO */
 
@@ -96,7 +95,6 @@ public class chatGUI {
 		this.frame.setLocation(((sizeH.width - sizeW.width) / 2), (sizeH.height - sizeW.height) / 2);
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new GridLayout(0, 2, 0, 0));
 
 		// Generar el menu superior
 		JMenuBar barra = new JMenuBar();
@@ -125,72 +123,173 @@ public class chatGUI {
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
-
-		this.panel_top = new JPanel();
-		frame.getContentPane().add(panel_top);
-		panel_top.setLayout(new GridLayout(5, 1, 0, 0));
-
-		this.panel_login = new JPanel();
-		panel_top.add(panel_login);
-		panel_login.setLayout(new GridLayout(0, 1, 0, 0));
+		frame.getContentPane().setLayout(null);
 
 		username = new JTextField();
-		this.panel_login.add(username);
+		username.setBounds(89, 0, 218, 38);
+		frame.getContentPane().add(username);
 		username.setDropMode(DropMode.INSERT);
 		username.setColumns(10);
 
 		JButton btnConectar = new JButton("Conectar");
+		btnConectar.setFont(new Font("Dialog", Font.BOLD, 10));
+		btnConectar.setForeground(Color.WHITE);
+		btnConectar.setBounds(330, 0, 119, 38);
+		btnConectar.setBackground(new Color(66, 203, 165));
+		frame.getContentPane().add(btnConectar);
 		this.btnDesconexion = new JButton("Desconectar");
+		btnDesconexion.setFont(new Font("Dialog", Font.BOLD, 10));
+		btnDesconexion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnDesconexion.setBounds(480, 0, 119, 38);
+		frame.getContentPane().add(btnDesconexion);
 
-		this.panel_login.add(btnConectar);
+		JLabel lblPersonasOnline = new JLabel("Personas Online");
+		lblPersonasOnline.setForeground(Color.WHITE);
+		lblPersonasOnline.setBounds(10, 45, 135, 67);
+		frame.getContentPane().add(lblPersonasOnline);
 
-		this.panel_login.add(btnDesconexion);
+		JLabel lblNickname = new JLabel("Nickname:");
+		lblNickname.setBounds(12, 11, 99, 27);
+		lblNickname.setForeground(new Color(255, 255, 255));
+		frame.getContentPane().add(lblNickname);
 
-		JLabel label = new JLabel("");
-		panel_login.add(label);
+		msgArea = new JPanel();
+		msgArea.setLayout(new GridLayout(10, 1, 5, 5));
+		msgArea.setBackground(Color.GRAY);
+		msgArea.setVisible(false);
+		msgArea.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		frame.getContentPane().add(msgArea);
+
+		JScrollPane scrollMensaje = new JScrollPane(msgArea);
+		scrollMensaje.setBounds(141, 55, 547, 474);
+		scrollMensaje.setVisible(false);
+		scrollMensaje.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		frame.getContentPane().add(scrollMensaje);
+
+		panel_online = new JPanel();
+		panel_online.setBounds(0, 90, 140, 439);
+		frame.getContentPane().add(panel_online);
+
+		btnEnviar = new JButton("Enviar");
+		btnEnviar.setBackground(new Color(66, 203, 165));
+		btnEnviar.setBounds(141, 530, 99, 67);
+		frame.getContentPane().add(btnEnviar);
+
+		inputMensaje = new JTextArea();
+		inputMensaje.setFont(new Font("Century Gothic", Font.PLAIN, 15));
+		inputMensaje.setWrapStyleWord(true);
+		inputMensaje.setLineWrap(true);
+		inputMensaje.setForeground(new Color(0, 0, 0));
+		inputMensaje.setBackground(new Color(255, 255, 255));
+		inputMensaje.setVisible(false);
+		inputMensaje.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+		JScrollPane scrollPaneText = new JScrollPane(inputMensaje);
+		scrollPaneText.setBounds(242, 530, 446, 67);
+		frame.getContentPane().add(scrollPaneText);
+
 		this.btnDesconexion.setVisible(false);
 
 		btnConectar.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
+
 				try {
+					if (username.getText().equals("")) {
+						throw new ExceptionChat("Escribe un nickname para conectarte", "E001");
+					} else if (username.getText().length() >= 20) {
+						throw new ExceptionChat("Máximo 20 caracteres", "E002");
+					}
+
 					Usuario userName = new Usuario();
 					userName.setNick(username.getText());
 
 					Model login = new Model();
-
 					login.conectarUsuario(userName);
+
+					btnDesconexion.setVisible(true);
+					inputMensaje.setEditable(true);
+					inputMensaje.setEnabled(true);
+					inputMensaje.setVisible(true);
+					msgArea.setVisible(true);
+					scrollMensaje.setVisible(true);
+
 					sesionIniciada();
 
 				} catch (Exception f) {
 					JOptionPane.showMessageDialog(null, f, "Exception detected", JOptionPane.WARNING_MESSAGE);
 				}
-				btnDesconexion.setVisible(true);
 
 			}
 		});
-
-		panel_online = new JPanel();
-		panel_top.add(panel_online);
-		panel_online.setLayout(new GridLayout(2, 3, 0, 0));
-
-		JLabel lblPersonasOnline = new JLabel("Personas Online");
-		panel_online.add(lblPersonasOnline);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		frame.getContentPane().add(scrollPane);
 	}
-	public void panelChat () {
-		
-		
-		
-		
-        
-		
-		
+
+	public void UsuariosOnline() {
+
+		try {
+
+			Model model = new Model();
+			ArrayList<Usuario> usuarios = model.getConnectedUsers();
+
+			for (Usuario usuario : usuarios) {
+				this.labelUsuarioOnline = new JLabel(usuario.getNick());
+				this.labelUsuarioOnline.setFont(new Font("Century Gothic", Font.PLAIN, 30));
+				this.labelUsuarioOnline.setForeground(new Color(66, 203, 165));
+				panel_online.add(labelUsuarioOnline);
+			}
+
+		} catch (Exception f) {
+			JOptionPane.showMessageDialog(null, f, "Exception detected", JOptionPane.WARNING_MESSAGE);
+		}
+
 	}
 
 	public void sesionIniciada()
 			throws ClassNotFoundException, SQLException, IOException, ParserConfigurationException {
+		
+		try {
+			Model mdl = new Model();
+			// Llistar els missatges
+			for (Mensaje msg : mdl.getMensajes()) {
+				plantillaMensaje message = new plantillaMensaje(msg.getNick(), msg.getMensaje(), msg.getHora());
+				msgArea.add(message.createMessage());
+			}
+
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Exception detected",
+					JOptionPane.WARNING_MESSAGE);
+		}
+
+		btnEnviar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				// Zona para enviar mensajes
+				try {
+					if (inputMensaje.getText().equals("")) {
+						throw new ExceptionChat("No puedes enviar mensajes sin texto", "E003");
+					} else if (inputMensaje.getText().length() >= 30) {
+						throw new ExceptionChat("Máximo 30 caracteres por mensaje", "E004");
+					}
+					Model mdl = new Model();
+					Mensaje msg = new Mensaje();
+					msg.setMensaje(inputMensaje.getText());
+					mdl.enviar(msg);
+					inputMensaje.setText(" ");
+
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "Exception detected",
+							JOptionPane.WARNING_MESSAGE);
+				}
+			}
+
+		});
+
+	
+
+		UsuariosOnline();
 
 		btnDesconexion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -211,19 +310,6 @@ public class chatGUI {
 		});
 
 		btnDesconexion.setForeground(Color.RED);
-		Model model = new Model();
-
-		try {
-			JLabel usuarios_online = new JLabel();
-			ArrayList<Usuario> usuarios = model.getConnectedUsers();
-			for (Usuario usuario : usuarios) {
-				this.labelUsuarioOnline = new JLabel(usuario.getNick());
-				panel_online.add(labelUsuarioOnline);
-			}
-
-		} catch (Exception f) {
-			JOptionPane.showMessageDialog(null, f, "Exception detected", JOptionPane.WARNING_MESSAGE);
-		}
 
 	}
 
@@ -234,5 +320,4 @@ public class chatGUI {
 	public void setFrame(JFrame frame) {
 		this.frame = frame;
 	}
-
 }
