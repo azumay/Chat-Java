@@ -1,4 +1,4 @@
-package E01Chat.Model;
+package E01Chat.model;
 
 public class Usuario {
 
