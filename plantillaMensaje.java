@@ -16,7 +16,7 @@ import E01Chat.model.Usuario;
 public class plantillaMensaje {
 	private String user;
 	private String message;
-	private Timestamp date;
+	private String date;
 	
 	/**
 	 * Constructor per obtindre les dades necesaries per crear un missatge
@@ -24,7 +24,7 @@ public class plantillaMensaje {
 	 * @param message
 	 * @param date
 	 */
-	public plantillaMensaje(String user, String message, Timestamp date) {
+	public plantillaMensaje(String user, String message, String date) {
 		this.user=user;
 		this.message=message;
 		this.date=date;

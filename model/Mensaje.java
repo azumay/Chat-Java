@@ -4,31 +4,33 @@ import java.sql.Timestamp;
 
 public class Mensaje {
 
-	int id;
 	String nick;
 	String mensaje;
-	Timestamp hora;
+	String hora;
 	
+	public Mensaje(String nick, String mensaje, String hora) {
+		
+		this.nick = nick;
+		this.mensaje = mensaje;
+		this.hora = hora;
+		
+	}
 	public Mensaje() {
+		
 		
 	}
 
-	public int getId() {
-		return id;
-	}
+	
 
-	public Timestamp getHora() {
+	public String getHora() {
 		return hora;
 	}
 
-	public void setHora(Timestamp hora) {
+	public void setHora(String hora) {
 		this.hora = hora;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
+	
 	public String getNick() {
 		return nick;
 	}

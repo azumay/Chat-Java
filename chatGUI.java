@@ -44,7 +44,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
-public class chatGUI {
+public class chatGUI extends JFrame {
 
 	private JFrame frame;
 	private JTextField username;
@@ -193,6 +193,34 @@ public class chatGUI {
 
 		this.btnDesconexion.setVisible(false);
 
+		javax.swing.Timer timer = new javax.swing.Timer(1300, new java.awt.event.ActionListener() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent ae) {
+				
+				String userName = "";
+				try {
+
+					Model model = new Model();
+					ArrayList<Usuario> usuarios = model.getConnectedUsers();
+
+					
+					for (Usuario usuario : usuarios) {
+						labelUsuarioOnline = new JLabel(usuario.getNick());
+						labelUsuarioOnline.setFont(new Font("Century Gothic", Font.PLAIN, 30));
+						labelUsuarioOnline.setForeground(new Color(66, 203, 165));
+						panel_online.add(labelUsuarioOnline);
+					}
+
+				} catch (Exception f) {
+					JOptionPane.showMessageDialog(null, f, "Exception detected", JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+		timer.start();
+		/**
+		 * ActionListener para CONECTAR un usuario
+		 */
+
 		btnConectar.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -225,10 +253,13 @@ public class chatGUI {
 
 			}
 		});
+		
+		
+		
 	}
 
 	public void UsuariosOnline() {
-
+/*
 		try {
 
 			Model model = new Model();
@@ -244,29 +275,34 @@ public class chatGUI {
 		} catch (Exception f) {
 			JOptionPane.showMessageDialog(null, f, "Exception detected", JOptionPane.WARNING_MESSAGE);
 		}
-
+*/
 	}
 
 	public void sesionIniciada()
 			throws ClassNotFoundException, SQLException, IOException, ParserConfigurationException {
-		
+
+		/* Obtener los MENSAJES */
 		try {
-			Model mdl = new Model();
-			// Llistar els missatges
-			for (Mensaje msg : mdl.getMensajes()) {
+
+			Model model = new Model();
+			ArrayList<Mensaje> arrayMensajes = model.getMensajes();
+
+			for (Mensaje msg : arrayMensajes) {
 				plantillaMensaje message = new plantillaMensaje(msg.getNick(), msg.getMensaje(), msg.getHora());
 				msgArea.add(message.createMessage());
 			}
 
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "Exception detected",
-					JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Exception detected", JOptionPane.WARNING_MESSAGE);
 		}
+
+		/**
+		 * ActionListener para ENVIAR MENSAJE
+		 */
 
 		btnEnviar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
-				// Zona para enviar mensajes
 				try {
 					if (inputMensaje.getText().equals("")) {
 						throw new ExceptionChat("No puedes enviar mensajes sin texto", "E003");
@@ -287,10 +323,11 @@ public class chatGUI {
 
 		});
 
-	
-
 		UsuariosOnline();
 
+		/**
+		 * ActionListener para DESCONECTAR usuario
+		 */
 		btnDesconexion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -300,7 +337,11 @@ public class chatGUI {
 					logout.desconectarUsuario();
 
 					btnDesconexion.setVisible(false);
-					labelUsuarioOnline.setVisible(false);
+					inputMensaje.setEditable(false);
+					inputMensaje.setEnabled(false);
+					inputMensaje.setVisible(false);
+					msgArea.setVisible(false);
+					inputMensaje.setText("");
 
 				} catch (Exception f) {
 					JOptionPane.showMessageDialog(null, f, "Exception detected", JOptionPane.WARNING_MESSAGE);
@@ -320,4 +361,6 @@ public class chatGUI {
 	public void setFrame(JFrame frame) {
 		this.frame = frame;
 	}
+
+	
 }
