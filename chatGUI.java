@@ -38,6 +38,8 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.BorderFactory;
 import javax.swing.DropMode;
+import javax.swing.ImageIcon;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JLabel;
@@ -61,6 +63,8 @@ public class chatGUI extends JFrame {
 	private JTextPane panel_online;
 
 	private JButton btnEnviar;
+	
+	private JScrollPane scrollMensaje;
 
 	/**
 	 * Create the application.
@@ -163,13 +167,13 @@ public class chatGUI extends JFrame {
 		msgArea.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		frame.getContentPane().add(msgArea);
 
-		JScrollPane scrollMensaje = new JScrollPane(msgArea);
+		scrollMensaje = new JScrollPane(msgArea);
 		scrollMensaje.setBounds(141, 55, 547, 474);
 		scrollMensaje.setVisible(false);
 		scrollMensaje.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		frame.getContentPane().add(scrollMensaje);
 
-		/*Zona donde agregaremos los usuarios online*/
+		/* Zona donde agregaremos los usuarios online */
 		panel_online = new JTextPane();
 		panel_online.setEditable(false);
 		panel_online.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -195,6 +199,10 @@ public class chatGUI extends JFrame {
 		JScrollPane scrollPaneText = new JScrollPane(inputMensaje);
 		scrollPaneText.setBounds(242, 530, 446, 67);
 		frame.getContentPane().add(scrollPaneText);
+
+		JPanel logo = new JPanel();
+		logo.setBounds(0, 530, 140, 80);
+		frame.getContentPane().add(logo);
 
 		this.btnDesconexion.setVisible(false);
 
@@ -277,6 +285,7 @@ public class chatGUI extends JFrame {
 					inputMensaje.setEnabled(false);
 					inputMensaje.setVisible(false);
 					msgArea.setVisible(false);
+					scrollMensaje.setVisible(false);
 					inputMensaje.setText("");
 					btnDesconexion.setForeground(Color.RED);
 
@@ -296,7 +305,7 @@ public class chatGUI extends JFrame {
 					Model model = new Model();
 					ArrayList<Usuario> usuarios = model.getConnectedUsers();
 					for (int i = 0; i < usuarios.size(); i++) {
-						userName += "✅"+usuarios.get(i).getNick() + "\n";
+						userName += "✅" + usuarios.get(i).getNick() + "\n";
 						panel_online.setText(userName);
 					}
 
@@ -336,5 +345,4 @@ public class chatGUI extends JFrame {
 	public void setFrame(JFrame frame) {
 		this.frame = frame;
 	}
-
 }
