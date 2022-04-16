@@ -1,6 +1,5 @@
 package E01Chat;
 
-import java.awt.EventQueue;
 import java.awt.Font;
 
 import javax.swing.JFrame;
@@ -9,36 +8,26 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import java.awt.Canvas;
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
-import javax.swing.SwingConstants;
-import javax.xml.parsers.ParserConfigurationException;
 
 import E01Chat.exception.ExceptionChat;
 import E01Chat.model.Mensaje;
 import E01Chat.model.Model;
 import E01Chat.model.Usuario;
 
-import java.awt.CardLayout;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.BorderFactory;
 import javax.swing.DropMode;
-import javax.swing.ImageIcon;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -51,33 +40,19 @@ public class chatGUI extends JFrame {
 	private JFrame frame;
 	private JTextField username;
 	private boolean conectado;
-
-	private JLabel labelUsuarioOnline;
-
 	private JButton btnDesconexion;
-	private JPanel panel_2;
-	private JPanel panel_4;
 	private JTextArea inputMensaje;
 	private JPanel msgArea;
-
 	private JTextPane panel_online;
-
 	private JButton btnEnviar;
-	
 	private JScrollPane scrollMensaje;
 
-	/**
-	 * Create the application.
-	 */
 	public chatGUI() throws ClassNotFoundException, SQLException {
 
 		initialize();
 
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 
 		/* VENTANA PRINCIPAL */
@@ -89,7 +64,7 @@ public class chatGUI extends JFrame {
 		frame.getContentPane().setBackground(new Color(34, 46, 53));
 		frame.getContentPane().setLayout(null);
 
-		/* POSICIONAMIENTO AUTO DE LA VENTANA DEL JUEGO */
+		/* POSICIONAMIENTO AUTO DE LA VENTANA */
 
 		Dimension sizeH, sizeW;
 
@@ -178,7 +153,7 @@ public class chatGUI extends JFrame {
 		panel_online.setEditable(false);
 		panel_online.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		panel_online.setBounds(0, 90, 140, 439);
-		panel_online.setFont(new Font("Century Gothic", Font.PLAIN, 25));
+		panel_online.setFont(new Font("Century Gothic", Font.PLAIN, 20));
 		panel_online.setForeground(new Color(66, 203, 165));
 		frame.getContentPane().add(panel_online);
 
@@ -199,10 +174,6 @@ public class chatGUI extends JFrame {
 		JScrollPane scrollPaneText = new JScrollPane(inputMensaje);
 		scrollPaneText.setBounds(242, 530, 446, 67);
 		frame.getContentPane().add(scrollPaneText);
-
-		JPanel logo = new JPanel();
-		logo.setBounds(0, 530, 140, 80);
-		frame.getContentPane().add(logo);
 
 		this.btnDesconexion.setVisible(false);
 
@@ -305,8 +276,10 @@ public class chatGUI extends JFrame {
 					Model model = new Model();
 					ArrayList<Usuario> usuarios = model.getConnectedUsers();
 					for (int i = 0; i < usuarios.size(); i++) {
-						userName += "✅" + usuarios.get(i).getNick() + "\n";
+						userName += "------------------\n" + "✅" + usuarios.get(i).getNick() + "\n"
+								+ DateTimeFormatter.ISO_LOCAL_TIME.format(usuarios.get(i).getFecha()) + "\n";
 						panel_online.setText(userName);
+
 					}
 
 				} catch (Exception f) {

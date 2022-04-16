@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -74,7 +75,7 @@ public class Model {
 			while (getUsersOnline.next()) {
 				Usuario user = new Usuario();
 				user.setNick(getUsersOnline.getString("nick"));
-				// user.setDate_con(getUsersOnline.getObject("date_con", LocalDateTime.class));
+				user.setFecha(getUsersOnline.getObject("date_con", LocalDateTime.class));
 				users.add(user);
 			}
 		} catch (Exception e) {
@@ -96,7 +97,6 @@ public class Model {
 		ArrayList<Mensaje> arrayMensajes = new ArrayList<>();
 
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
 
 			ResultSet result = this.conexion.createStatement().executeQuery("call getMessages()");
 
@@ -104,11 +104,6 @@ public class Model {
 
 				arrayMensajes.add(new Mensaje(result.getString(1), result.getString(2), result.getString(3)));
 
-				/*
-				 * Mensaje mensajes = new Mensaje(); mensajes.setNick(result.getString("nick"));
-				 * mensajes.setMensaje(result.getString("mensaje"));
-				 * mensajes.setHora(result.getTimestamp("hora")); arrayMensajes.add(mensajes);
-				 */
 			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Exception detected", JOptionPane.WARNING_MESSAGE);
